@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Небольшой калькулятор бюджета туристической поездки" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23e76332'/%3E%3Cpath d='M20 43 43 20m0 0H27m16 0v16' fill='none' stroke='white' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <title>TripBudget — калькулятор поездки</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="TripBudget — на главную">
+        <span class="brand__mark" aria-hidden="true">↗</span>
+        TripBudget
+      </a>
+      <span class="site-header__note">Расчёт без регистрации</span>
+    </header>
+
+    <main id="top">
+      <section class="intro">
+        <p class="eyebrow">Калькулятор поездки</p>
+        <h1>Посчитайте бюджет<br /><span>до отправления</span></h1>
+        <p class="intro__text">
+          Добавьте основные расходы, укажите состав группы и узнайте общую стоимость
+          и бюджет на одного путешественника.
+        </p>
+      </section>
+
+      <section class="calculator" aria-label="Калькулятор бюджета">
+        <form class="budget-form" id="budget-form">
+          <div class="section-heading">
+            <div>
+              <span>01</span>
+              <h2>Параметры поездки</h2>
+            </div>
+            <button class="text-button" id="reset-button" type="reset">Сбросить</button>
+          </div>
+
+          <div class="field field--wide">
+            <label for="trip-name">Название поездки</label>
+            <input id="trip-name" name="tripName" value="Выходные в Карелии" maxlength="60" required />
+          </div>
+
+          <div class="fields-grid">
+            <div class="field">
+              <label for="travelers">Путешественники</label>
+              <div class="input-unit"><input id="travelers" name="travelers" type="number" min="1" max="100" value="4" required /><span>чел.</span></div>
+            </div>
+            <div class="field">
+              <label for="days">Продолжительность</label>
+              <div class="input-unit"><input id="days" name="days" type="number" min="1" max="60" value="3" required /><span>дн.</span></div>
+            </div>
+          </div>
+
+          <div class="section-heading section-heading--expenses">
+            <div><span>02</span><h2>Расходы</h2></div>
+            <small>в рублях на всю группу</small>
+          </div>
+
+          <div class="fields-grid">
+            <div class="field">
+              <label for="transport">Транспорт</label>
+              <div class="input-unit"><input id="transport" name="transport" type="number" min="0" value="18000" /><span>₽</span></div>
+            </div>
+            <div class="field">
+              <label for="accommodation">Проживание</label>
+              <div class="input-unit"><input id="accommodation" name="accommodation" type="number" min="0" value="24000" /><span>₽</span></div>
+            </div>
+            <div class="field">
+              <label for="food">Питание на человека в день</label>
+              <div class="input-unit"><input id="food" name="food" type="number" min="0" value="1500" /><span>₽</span></div>
+            </div>
+            <div class="field">
+              <label for="activities">Экскурсии и развлечения</label>
+              <div class="input-unit"><input id="activities" name="activities" type="number" min="0" value="8000" /><span>₽</span></div>
+            </div>
+            <div class="field field--wide">
+              <label for="reserve">Финансовый запас</label>
+              <div class="range-row">
+                <input id="reserve" name="reserve" type="range" min="0" max="30" step="5" value="10" />
+                <output id="reserve-output" for="reserve">10%</output>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <aside class="summary" aria-live="polite">
+          <div class="summary__top">
+            <p>Предварительный расчёт</p>
+            <span class="summary__badge">Обновляется автоматически</span>
+          </div>
+
+          <div class="summary__total">
+            <span>Общий бюджет</span>
+            <strong id="total-value">0 ₽</strong>
+          </div>
+
+          <div class="summary__person">
+            <span>На одного человека</span>
+            <strong id="person-value">0 ₽</strong>
+          </div>
+
+          <dl class="breakdown">
+            <div><dt>Транспорт</dt><dd id="transport-value">0 ₽</dd></div>
+            <div><dt>Проживание</dt><dd id="accommodation-value">0 ₽</dd></div>
+            <div><dt>Питание</dt><dd id="food-value">0 ₽</dd></div>
+            <div><dt>Развлечения</dt><dd id="activities-value">0 ₽</dd></div>
+            <div><dt>Запас</dt><dd id="reserve-value">0 ₽</dd></div>
+          </dl>
+
+          <button class="primary-button" id="save-button" type="button">Сохранить расчёт</button>
+          <p class="summary__hint" id="save-message" role="status">Расчёты сохраняются только в этом браузере.</p>
+        </aside>
+      </section>
+
+      <section class="saved" aria-labelledby="saved-title">
+        <div class="saved__header">
+          <div><p class="eyebrow">История</p><h2 id="saved-title">Сохранённые расчёты</h2></div>
+          <span id="saved-count">0 вариантов</span>
+        </div>
+        <div class="saved__list" id="saved-list"></div>
+        <p class="saved__empty" id="saved-empty">Здесь появятся варианты, которые вы захотите сравнить.</p>
+      </section>
+    </main>
+
+    <footer>
+      <span>TripBudget</span>
+      <p>Учебный frontend-проект на HTML, CSS и JavaScript.</p>
+    </footer>
+
+    <template id="saved-card-template">
+      <article class="saved-card">
+        <div><h3></h3><p></p></div>
+        <div class="saved-card__price"><strong></strong><span>на человека</span></div>
+        <div class="saved-card__actions">
+          <button class="restore-button" type="button">Открыть</button>
+          <button class="delete-button" type="button" aria-label="Удалить расчёт">×</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
